@@ -1,17 +1,53 @@
 (ns slides 
   (:require
     [reagent.core :as r]
-    [reagent.dom :as rdom]))
+    [reagent.dom :as rdom]
+    [scittlets.reagent.mermaid :refer [mermaid+]]))
 
-(defn slides []
+(def graphs
+  {:hello "%%{init: {'theme':'dark'}}%%
+
+sequenceDiagram
+    Alice ->> Bob: Hello Bob, how are you?
+    Bob-->>John: How about you John?
+    Bob--x Alice: I am good thanks!
+    Bob-x John: I am good thanks!
+    Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
+
+    Bob-->Alice: Checking with John...
+    Alice->John: Yes... John, how are you?"
+
+   :journey "%%{init: {'theme':'dark'}}%%
+
+journey
+    title My working day
+    section Go to work
+      Make tea: 5: Me
+      Go upstairs: 3: Me
+      Do work: 1: Me, Cat
+    section Go home
+      Go downstairs: 5: Me
+      Sit down: 5: Me"   })
+
+(defn slides-counter-header [state]
+  (when-let [get-slide-count (:get-slide-count-fn @state)]
+    (let [{:keys [slide]} @state
+          scount (get-slide-count)
+          slide (inc (mod slide scount))]
+      [:header {:style {:font-size "0.4em"}} (str slide "/" scount)]
+      ))
+  )
+
+(defn slides [state]
   [:<>
-   ; your slides start here
-   ; each slide is a :section
-   ; you can add whatever hiccup you like
+   ;; your slides start here
+   ;; each slide is a :section
+   ;; you can add whatever hiccup you like
 
    [:section
-    [:h1 "Hello"]
-    [:h2 "Your first slide."]
+    [slides-counter-header state]
+    [:h1 "Hello 🧜‍♀️"]
+    [mermaid+ (:hello graphs)]
     [:footer
      [:small
       [:a {:href "https://github.com/chr15m/scittle-tiny-slides"
@@ -19,14 +55,25 @@
        "Made with Scittle Tiny Slides"]]]]
 
    [:section
-    [:h1 "Slide Two"]
-    [:img {:src "https://w.wiki/CAvg"}]
-    [:h3 "It's the moon."]]
+    [slides-counter-header state]
+    [:h1 "Journey 🐈"]
+    [mermaid+ (:journey graphs)]]
 
    [:section
-    [:h1 "Slide Three"]
-    [:h2
-     [:p [:code "Thank you for watching."]]]]])
+    [slides-counter-header state]
+    [:h1 "Links"]
+    [:ul 
+     [:li [:span
+           "Slides: "
+           [:a {:href "https://github.com/ikappaki/scittlets-slides"} "https://github.com/ikappaki/scittlets-slides"]]]
+     [:li [:span
+           "Scittlets: "
+           [:a {:href "https://ikappaki.github.io/scittlets/"} "https://ikappaki.github.io/scittlets/"]]]
+     [:li [:span
+           "Scittle: "
+           [:a {:href "https://github.com/babashka/scittle"} "https://github.com/babashka/scittle"]]]]]
+   
+   ])
 
 ; *** implementation details *** ;
 
@@ -79,7 +126,7 @@
    [:main {:on-click
            #(when (not (clickable? %))
               (swap! state update :touch-ui not))}
-    [slides]]
+    [slides state get-slide-count]]
    [component:show-slide state]
    [component:touch-ui state]])
 
@@ -91,4 +138,4 @@
   (do
     (aset js/window "onkeydown" #(keydown %))
     ; trigger a second render so we get the sections count
-    (swap! state assoc :slide 0 :touch-ui true)))
+    (swap! state assoc :slide 0 :touch-ui true :get-slide-count-fn get-slide-count)))

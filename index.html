@@ -2,6 +2,7 @@
 <html lang="en-us">
   <head>
     <title>Tiny Slides</title>
+    <base href="/">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
@@ -9,9 +10,23 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/concrete.css@3.0.0/concrete.min.css">
     <script src="https://cdn.jsdelivr.net/npm/scittle@latest/dist/scittle.min.js" type="application/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/scittle@latest/dist/scittle.promesa.min.js" type="application/javascript"></script>
-    <script src="https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.production.min.js"></script>
-    <script src=" https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/scittle@latest/dist/scittle.reagent.min.js" type="application/javascript"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.production.min.js"></script> -->
+    <!-- <script src=" https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.production.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/scittle@latest/dist/scittle.reagent.min.js" type="application/javascript"></script> -->
+
+    <!-- Mermaid scittlet deps -->
+    <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/scittle@latest/dist/scittle.reagent.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ikappaki/scittlets/src/scittlets/reagent/mermaid.cljs" type="application/x-scittle"></script>
+
+    <!-- <div style="position: absolute; right: 0; top: 5; margin-right: 10px" stylex="float: right"> -->
+    <!--   <a href="https://github.com/ikappaki/scittlets"> -->
+    <!--     <img src="https://img.shields.io/badge/GitHub-Scittlets-blue?style=flat-square&logo=github&logoColor=white"> -->
+    <!--   </a> -->
+    <!-- </div> -->
+
     <link rel="stylesheet" href="style.css">
     <script type="application/x-scittle" src="slides.cljs"></script>
   </head>
