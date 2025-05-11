@@ -4,6 +4,9 @@
     [reagent.dom :as rdom]
     [scittlets.reagent.mermaid :refer [mermaid+]]))
 
+(def version (-> (.querySelector js/document "meta[name=\"scittlets.reagent.mermaid.version\"]")
+                 (.getAttribute "content")))
+
 (def graphs
   {:hello "%%{init: {'theme':'dark'}}%%
 
@@ -46,7 +49,7 @@ journey
 
    [:section
     [slides-counter-header state]
-    [:h1 "Hello 🧜‍♀️"]
+    [:h1 "Hello 🧜‍♀️" [:span {:style {:font-size "0.2em"}} version]]
     [mermaid+ (:hello graphs)]
     [:footer
      [:small
