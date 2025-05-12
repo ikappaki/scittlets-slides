@@ -65,19 +65,20 @@ journey
    [:section
     [slides-counter-header state]
     [:h1 "Links"]
-    [:ul {:style {:list-style "none"
-                  :margin "0 auto"
-                  :padding "0"
-                  :text-align "center"}}
-     [:li [:span
-           "Slides: "
-           [:a {:href "https://github.com/ikappaki/scittlets-slides"} "https://github.com/ikappaki/scittlets-slides"]]]
-     [:li [:span
-           "Scittlets: "
-           [:a {:href "https://github.com/ikappaki/scittlets"} "https://github.com/ikappaki/scittlets"]]]
-     [:li [:span
-           "Scittle: "
-           [:a {:href "https://github.com/babashka/scittle"} "https://github.com/babashka/scittle"]]]]]
+
+    [:div {:style {:display "flex"
+                   :justify-content "center"
+                   :align-items "center"}}
+     [:ul
+      [:li [:span
+            "Slides: "
+            [:a {:href "https://github.com/ikappaki/scittlets-slides"} "https://github.com/ikappaki/scittlets-slides"]]]
+      [:li [:span
+            "Scittlets: "
+            [:a {:href "https://github.com/ikappaki/scittlets"} "https://github.com/ikappaki/scittlets"]]]
+      [:li [:span
+            "Scittle: "
+            [:a {:href "https://github.com/babashka/scittle"} "https://github.com/babashka/scittle"]]]]]]
    
    ])
 
