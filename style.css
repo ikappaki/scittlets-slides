@@ -19,6 +19,34 @@ main {
   width: calc(100% - 6em);
 }
 
+.cm-editor {
+  display: inline-block;
+  width: auto;
+
+  border: 2px solid #4A90E2; /* crisp blue border */
+  border-radius: 6px;
+  padding: 4px;
+  background-color: white;
+  color: black;
+}}
+
+.cm-scroller {
+  overflow: visible;
+}
+
+.cm-content {
+  white-space: pre;
+  display: inline-block;
+  /* min-width: max-content; */
+  overflow: visible;
+  min-width: 70em;
+  text-align: left;
+}
+
+/* .cm-content { */
+/*   text-align: left; */
+/* } */
+
 @media (width <= 1024px) {
   body {
     font-size: 1.5em;

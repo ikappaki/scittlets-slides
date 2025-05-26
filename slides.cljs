@@ -2,7 +2,8 @@
   (:require
     [reagent.core :as r]
     [reagent.dom :as rdom]
-    [scittlets.reagent.mermaid :refer [mermaid+]]))
+    [scittlets.reagent.mermaid :refer [mermaid+]]
+    [slides-codemirror :refer [codemirror+]]))
 
 (def version (-> (.querySelector js/document "meta[name=\"scittlets.reagent.mermaid.version\"]")
                  (.getAttribute "content")))
@@ -32,59 +33,59 @@ journey
       Go downstairs: 5: Me
       Sit down: 5: Me"   })
 
+(defonce state* (r/atom {:journey* (r/atom (:journey graphs))}))
+
 (defn slides-counter-header [state]
   (when-let [get-slide-count (:get-slide-count-fn @state)]
     (let [{:keys [slide]} @state
           scount (get-slide-count)
           slide (inc (mod slide scount))]
-      [:header {:style {:font-size "0.4em"}} (str slide "/" scount)]
-      ))
-  )
+      [:header {:style {:font-size "0.4em"}} (str slide "/" scount)])))
 
 (defn slides [state]
-  [:<>
-   ;; your slides start here
-   ;; each slide is a :section
-   ;; you can add whatever hiccup you like
+  (let [{:keys [journey*]} @state
+        journey @journey*]
+    [:<>
+     ;; your slides start here
+     ;; each slide is a :section
+     ;; you can add whatever hiccup you like
 
-   [:section
-    [slides-counter-header state]
-    [:h1 "Hello 🧜‍♀️" [:span {:style {:font-size "0.2em"}} version]]
-    [mermaid+ (:hello graphs)]
-    [:footer
-     [:small
-      [:a {:href "https://github.com/chr15m/scittle-tiny-slides"
-           :target "_BLANK"}
-       "Made with Scittle Tiny Slides"]]]]
+     [:section
+      [slides-counter-header state]
+      [:h1 "Hello 🧜‍♀️" [:span {:style {:font-size "0.2em"}} version]]
+      [mermaid+ (:hello graphs)]
+      [:footer
+       [:small
+        [:a {:href "https://github.com/chr15m/scittle-tiny-slides"
+             :target "_BLANK"}
+         "Made with Scittle Tiny Slides"]]]]
 
-   [:section
-    [slides-counter-header state]
-    [:h1 "Journey 🐈"]
-    [mermaid+ (:journey graphs)]]
+     [:section
+      [slides-counter-header state]
+      [:h1 "Code🪞" [:span {:style {:font-size "0.2em"}} version]]
+      [:h4 {:style {:margin "0px"}} "✏️✍️ edit me 😊"]
+      [codemirror+ journey journey*]
+      [mermaid+ journey]]
 
-   [:section
-    [slides-counter-header state]
-    [:h1 "Links"]
+     [:section
+      [slides-counter-header state]
+      [:h1 "Links"]
 
-    [:div {:style {:display "flex"
-                   :justify-content "center"
-                   :align-items "center"}}
-     [:ul
-      [:li [:span
-            "Slides: "
-            [:a {:href "https://github.com/ikappaki/scittlets-slides"} "https://github.com/ikappaki/scittlets-slides"]]]
-      [:li [:span
-            "Scittlets: "
-            [:a {:href "https://github.com/ikappaki/scittlets"} "https://github.com/ikappaki/scittlets"]]]
-      [:li [:span
-            "Scittle: "
-            [:a {:href "https://github.com/babashka/scittle"} "https://github.com/babashka/scittle"]]]]]]
-   
-   ])
+      [:div {:style {:display "flex"
+                     :justify-content "center"
+                     :align-items "center"}}
+       [:ul
+        [:li [:span
+              "Slides: "
+              [:a {:href "https://github.com/ikappaki/scittlets-slides"} "https://github.com/ikappaki/scittlets-slides"]]]
+        [:li [:span
+              "Scittlets: "
+              [:a {:href "https://github.com/ikappaki/scittlets"} "https://github.com/ikappaki/scittlets"]]]
+        [:li [:span
+              "Scittle: "
+              [:a {:href "https://github.com/babashka/scittle"} "https://github.com/babashka/scittle"]]]]]]]))
 
 ; *** implementation details *** ;
-
-(defonce state (r/atom nil)) ; re-initialized below
 
 (defn get-slide-count []
   (aget
@@ -108,13 +109,13 @@ journey
     (let [k (aget ev "key")]
       (cond
         (contains? #{"ArrowLeft" "ArrowUp" "PageUp"} k)
-        (move-slide! state ev dec)
+        (move-slide! state* ev dec)
         (contains? #{"ArrowRight" "ArrowDown" "PageDown" "Enter" " "} k)
-        (move-slide! state ev inc)
+        (move-slide! state* ev inc)
         (contains? #{"Escape" "Home" "h"} k)
-        (swap! state assoc :slide 0)
+        (swap! state* assoc :slide 0)
         (contains? #{"End"} k)
-        (swap! state assoc :slide (dec (get-slide-count)))))))
+        (swap! state* assoc :slide (dec (get-slide-count)))))))
 
 (defn component:show-slide [state]
   [:style (str "section:nth-child("
@@ -138,11 +139,11 @@ journey
    [component:touch-ui state]])
 
 (rdom/render
-  [component:slide-viewer state]
+  [component:slide-viewer state*]
   (.getElementById js/document "app"))
 
 (defonce setup
   (do
     (aset js/window "onkeydown" #(keydown %))
     ; trigger a second render so we get the sections count
-    (swap! state assoc :slide 0 :touch-ui true :get-slide-count-fn get-slide-count)))
+    (swap! state* assoc :slide 0 :touch-ui true :get-slide-count-fn get-slide-count)))
