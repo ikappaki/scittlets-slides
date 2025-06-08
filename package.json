@@ -3,6 +3,6 @@
     "cljs-josh": "github:chr15m/cljs-josh"
   },
   "dependencies": {
-    "scittlets": "^0.2.1"
+    "scittlets": "^0.5.1"
   }
 }
